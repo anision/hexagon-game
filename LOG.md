@@ -242,4 +242,34 @@
 
 ---
 
+---
+
+### Implementação M4 — Interface do Jogo (Canvas)
+
+**Desenvolvedor:**
+> Sim, vamos continuar para M4.
+
+**Assistente:**
+> Implementadas todas as 4 tasks do M4 seguindo o plano de execução (T1 sequencial, T2+T3 paralelas, T4 sequencial):
+>
+> | Task | Entregável | Commit |
+> |---|---|---|
+> | T1 | `renderer.js` — hexToPixel, pixelToHex, drawBoard, resizeCanvas, flashConquest | `9791c4b` |
+> | T2 | `input.js` — setupInput, seleção, execução de movimentos, AbortController para restart | `a90d072` |
+> | T3 | `ui.js` — update, showGameOver, hideGameOver; `index.html` + `style.css` atualizados | `a90d072` |
+> | T4 | `main.js` — conecta HexGame, renderer, input e ui; resize; restart | `58adc05` |
+>
+> Bugs encontrados e corrigidos durante o desenvolvimento:
+> - `pixelToHex` retornava `-0` para a célula (4,0) — corrigido com `r: r || 0` (normalização IEEE 754)
+> - `_afterMove` usava heurística errada para detectar conquistas — substituído por comparação de `countPieces()` antes e depois do `game.move()`
+> - `setupInput` chamado a cada restart empilhava listeners — corrigido com `AbortController` que remove o listener anterior
+>
+> Testes unitários T1: 11/11 ✅ — `node frontend/js/engine/tests/test_renderer.js`
+> Smoke tests T2/T3/T4: verificar no browser
+>
+> Status do M4: **Done** ✅
+> Próxima milestone: M5 — Modos de Jogo (Hot-seat e IA Greedy)
+
+---
+
 <!-- Novas iterações serão adicionadas abaixo -->

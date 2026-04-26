@@ -26,7 +26,8 @@ _(nenhum registrado)_
 - [x] Especificar M5 — Modos de Jogo ✓
 - [x] Especificar M6 — Recordes ✓
 - [x] Especificar M7 — Polimento e Deploy ✓
-- [ ] Definir paleta de cores e identidade visual do jogo
+- [x] Implementar M4 — Interface Canvas ✓
+- [ ] Especificar + Implementar M5 — Modos de Jogo
 
 ## Deferred Ideas
 
