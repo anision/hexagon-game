@@ -210,4 +210,36 @@
 
 ---
 
+---
+
+### Implementação M3 — Motor do Jogo
+
+**Desenvolvedor:**
+> Vamos seguir para o M3.
+
+**Assistente:**
+> Decisão de arquitetura registrada: motor do jogo em JavaScript (frontend), pois o jogo roda
+> inteiro no browser sem multiplayer online. Backend cuida apenas de auth e recordes.
+>
+> Criado `tasks.md` do M3 (4 tasks sequenciais) e implementado todo o motor:
+>
+> | Task | Entregável | Testes |
+> |---|---|---|
+> | T1 | `hex_utils.js` — isInBoard, getNeighbors, getJumpTargets, hexDistance | 16 ✅ |
+> | T2 | `board.js` — HexBoard (61 células, setup, countPieces) | 11 ✅ |
+> | T3 | `game.js` — moveShort, moveLong, _capture | 11 ✅ |
+> | T4 | `game.js` — move, isGameOver, getWinner, getValidMoves | 19 ✅ |
+>
+> **Total: 57/57 testes passando** ✅
+>
+> Bugs encontrados e corrigidos durante os testes:
+> - Test hex_utils: distância vértice→vértice era 8, não 4 (corrigido nas asserções)
+> - Test board: _init usa variável `row` (não conflita com `r`), mapeado corretamente
+> - Test game_moves: (1,-2) não é vizinho de (0,-3) — corrigido com vizinhos reais
+> - Test game_state: último elemento do Map era posição inicial do P1 (não 'empty') — corrigido deixando (0,0) explicitamente vazia
+>
+> Status do M3: **Done** ✅
+
+---
+
 <!-- Novas iterações serão adicionadas abaixo -->

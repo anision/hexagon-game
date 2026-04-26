@@ -1,7 +1,7 @@
 # M3 — Motor do Jogo: Tasks
 
 **Spec**: `.specs/features/m3-game-engine/spec.md`
-**Status**: Approved
+**Status**: Done
 
 > **Decisão de arquitetura:** O motor do jogo vive no **frontend (JavaScript ES2022)**,
 > pois o jogo roda inteiro no browser sem multiplayer online em tempo real.

@@ -165,17 +165,17 @@ O coração do Hexagon é sua lógica de jogo — as regras que determinam movim
 
 | Requirement ID | Story | Phase | Status |
 |---|---|---|---|
-| ENGINE-01 | Tabuleiro hexagonal 61 células | Tasks | Pending |
-| ENGINE-02 | Posições iniciais dos jogadores | Tasks | Pending |
-| ENGINE-03 | Cálculo de vizinhos (adjacentes) | Tasks | Pending |
-| ENGINE-04 | Cálculo de alvos de pulo (2 passos) | Tasks | Pending |
-| ENGINE-05 | Movimento curto com duplicação | Tasks | Pending |
-| ENGINE-06 | Movimento longo sem duplicação | Tasks | Pending |
-| ENGINE-07 | Conquista de peças adjacentes | Tasks | Pending |
-| ENGINE-08 | Alternância de turnos | Tasks | Pending |
-| ENGINE-09 | Detecção de fim de jogo | Tasks | Pending |
-| ENGINE-10 | Determinação do vencedor | Tasks | Pending |
-| ENGINE-11 | Listagem de movimentos válidos | Tasks | Pending |
+| ENGINE-01 | Tabuleiro hexagonal 61 células | Tasks | Verified |
+| ENGINE-02 | Posições iniciais dos jogadores | Tasks | Verified |
+| ENGINE-03 | Cálculo de vizinhos (adjacentes) | Tasks | Verified |
+| ENGINE-04 | Cálculo de alvos de pulo (2 passos) | Tasks | Verified |
+| ENGINE-05 | Movimento curto com duplicação | Tasks | Verified |
+| ENGINE-06 | Movimento longo sem duplicação | Tasks | Verified |
+| ENGINE-07 | Conquista de peças adjacentes | Tasks | Verified |
+| ENGINE-08 | Alternância de turnos | Tasks | Verified |
+| ENGINE-09 | Detecção de fim de jogo | Tasks | Verified |
+| ENGINE-10 | Determinação do vencedor | Tasks | Verified |
+| ENGINE-11 | Listagem de movimentos válidos | Tasks | Verified |
 
 **Coverage:** 11 requisitos, 0 mapeados para tasks, 11 pendentes ⚠️
 
