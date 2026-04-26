@@ -64,7 +64,7 @@ function scheduleAiMove() {
   inputState.isAiTurn = true;
   if (aiThinking) aiThinking.classList.remove('hidden');
 
-  setTimeout(() => {
+  setTimeout(async () => {
     const move = getBestMove(game);
     if (move) {
       game.move(move.fromQ, move.fromR, move.toQ, move.toR);
