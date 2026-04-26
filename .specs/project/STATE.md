@@ -27,7 +27,7 @@ _(nenhum registrado)_
 - [x] Especificar M6 — Recordes ✓
 - [x] Especificar M7 — Polimento e Deploy ✓
 - [x] Implementar M4 — Interface Canvas ✓
-- [ ] Especificar + Implementar M5 — Modos de Jogo
+- [x] Implementar M5 — Modos de Jogo ✓
 
 ## Deferred Ideas
 

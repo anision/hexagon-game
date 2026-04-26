@@ -272,4 +272,32 @@
 
 ---
 
+---
+
+### Implementação M5 — Modos de Jogo
+
+**Desenvolvedor:**
+> Sim, o jogo está funcionando.
+
+**Assistente:**
+> Implementadas as 3 tasks do M5:
+>
+> | Task | Entregável | Commit |
+> |---|---|---|
+> | T1 | `ai.js` — getBestMove greedy + 4 testes unitários | `c90f8a6` |
+> | T2 | `mode-select.html` + `mode-select.css` — tela de seleção | `04c6e0f` |
+> | T3 | `main.js` + `input.js` + `index.html` — loop IA, bloqueio de cliques, indicador | `04c6e0f` |
+>
+> Bugs encontrados e corrigidos:
+> - Teste de prioridade short move era flaky (cenário com múltiplos short moves com score igual) — corrigido com cenário determinístico onde apenas um short move captura peça
+> - `docker compose restart` não relê `env_file` — necessário `docker compose up -d` para pegar credenciais novas
+> - Alembic não rodava automaticamente — adicionado `entrypoint.sh` que executa migrations antes de subir uvicorn
+>
+> Fluxo completo: login → mode-select.html → index.html?mode=hotseat|ai → jogo → overlay → mode-select.html
+>
+> Status do M5: **Done** ✅
+> Próxima milestone: M6 — Recordes
+
+---
+
 <!-- Novas iterações serão adicionadas abaixo -->
