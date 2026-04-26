@@ -20,15 +20,22 @@ export const state = {
   isAnimating:  false,
 };
 
+// AbortController to remove the previous listener on restart
+let _inputAbort = null;
+
 /**
- * Set up the Canvas click handler.
+ * Set up the Canvas click handler, replacing any previously registered one.
  *
  * @param {HTMLCanvasElement} canvas
  * @param {HexGame}           game     — engine instance
- * @param {object}            renderer — { drawBoard, pixelToHex, flashConquest, hexSize, cx, cy }
+ * @param {object}            renderer — { hexSize, cx, cy }
  * @param {object}            ui       — { update, showGameOver }
  */
 export function setupInput(canvas, game, renderer, ui) {
+  // Remove previous listener before attaching a new one (restart support)
+  if (_inputAbort) _inputAbort.abort();
+  _inputAbort = new AbortController();
+
   canvas.addEventListener('click', (event) => {
     // Block clicks during flash animation
     if (state.isAnimating) return;
@@ -55,10 +62,11 @@ export function setupInput(canvas, game, renderer, ui) {
     const isShort = state.shortMoves.some(([sq, sr]) => sq === q && sr === r);
     if (isShort && state.selectedCell) {
       const { q: fq, r: fr } = state.selectedCell;
+      const prevCounts = game.board.countPieces();
       game.move(fq, fr, q, r);
       state.lastMove = { from: [fq, fr], to: [q, r] };
       _clearSelection();
-      _afterMove(canvas, game, renderer, ui);
+      _afterMove(canvas, game, renderer, ui, prevCounts);
       return;
     }
 
@@ -66,10 +74,11 @@ export function setupInput(canvas, game, renderer, ui) {
     const isLong = state.longMoves.some(([lq, lr]) => lq === q && lr === r);
     if (isLong && state.selectedCell) {
       const { q: fq, r: fr } = state.selectedCell;
+      const prevCounts = game.board.countPieces();
       game.move(fq, fr, q, r);
       state.lastMove = { from: [fq, fr], to: [q, r] };
       _clearSelection();
-      _afterMove(canvas, game, renderer, ui);
+      _afterMove(canvas, game, renderer, ui, prevCounts);
       return;
     }
 
@@ -87,7 +96,7 @@ export function setupInput(canvas, game, renderer, ui) {
     // ── Case 4: any other click → cancel selection ────────────────────────
     _clearSelection();
     _redraw(canvas, game, renderer);
-  });
+  }, { signal: _inputAbort.signal });
 }
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -110,11 +119,12 @@ function _redraw(canvas, game, renderer) {
   );
 }
 
-function _afterMove(canvas, game, renderer, ui) {
-  // Check if any conquests happened (captured pieces trigger flash)
+function _afterMove(canvas, game, renderer, ui, prevCounts) {
   const counts = game.board.countPieces();
-  const hadConquest = counts.empty < 61 - (counts.player1 + counts.player2 - 1);
-  // Always redraw immediately to show the move result
+  // Conquest happened if the opponent lost pieces compared to before the move
+  const opponent = game.currentPlayer === 'player1' ? 'player2' : 'player1';
+  const hadConquest = counts[opponent] < prevCounts[opponent];
+
   _redraw(canvas, game, renderer);
   ui.update(game);
 
@@ -123,9 +133,6 @@ function _afterMove(canvas, game, renderer, ui) {
     return;
   }
 
-  // Flash if conquests occurred (pieces count changed beyond the duplicated piece)
-  // Simple heuristic: flash always after a short move (duplicate + capture is common)
-  // The flash is cosmetic — it doesn't block correctness
   if (hadConquest) {
     state.isAnimating = true;
     flashConquest(canvas.getContext('2d'), state, () => {
