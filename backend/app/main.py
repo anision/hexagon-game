@@ -8,6 +8,7 @@ from starlette.middleware.sessions import SessionMiddleware
 
 from app.core.config import settings
 from app.api.auth import router as auth_router
+from app.api.games import router as games_router
 from app.api.players import router as players_router
 
 logging.basicConfig(level=logging.INFO)
@@ -29,6 +30,7 @@ app.add_middleware(
 )
 
 app.include_router(auth_router)
+app.include_router(games_router)
 app.include_router(players_router)
 
 
