@@ -56,3 +56,56 @@ html, body {
   border-radius: 8px;
   max-width: 100%;
 }
+
+/* Player profile in header */
+#game-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 840px;
+}
+
+.player-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.player-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.player-initials {
+  background-color: #4361ee;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.player-name {
+  font-size: 0.95rem;
+  color: #e2e8f0;
+}
+
+.btn-logout {
+  background: transparent;
+  border: 1px solid #4361ee;
+  color: #4361ee;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  padding: 4px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-logout:hover {
+  background: #4361ee;
+  color: #fff;
+}
