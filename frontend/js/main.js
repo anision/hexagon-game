@@ -113,7 +113,7 @@ async function loadProfile() {
   const player = await res.json();
   const header = document.getElementById('game-header');
   const avatar = player.avatar_url
-    ? `<img src="${player.avatar_url}" alt="avatar" class="player-avatar" />`
+    ? `<img src="${player.avatar_url}" alt="avatar" class="player-avatar" referrerpolicy="no-referrer" />`
     : `<div class="player-avatar player-initials">${player.name.charAt(0).toUpperCase()}</div>`;
   header.innerHTML = `
     <h1 class="game-title">Hexagon</h1>

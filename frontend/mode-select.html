@@ -60,7 +60,7 @@
       const player = await res.json();
       const bar = document.getElementById('player-bar');
       const avatar = player.avatar_url
-        ? `<img src="${player.avatar_url}" alt="avatar" class="player-avatar" />`
+        ? `<img src="${player.avatar_url}" alt="avatar" class="player-avatar" referrerpolicy="no-referrer" />`
         : `<div class="player-avatar player-initials">${player.name.charAt(0).toUpperCase()}</div>`;
       bar.innerHTML = `
         ${avatar}

@@ -24,6 +24,11 @@
       <aside id="game-sidebar">
         <div id="turn-indicator" data-player="1">Vez do Jogador 1</div>
 
+        <!-- AI thinking indicator — lives in sidebar so it never shifts the canvas -->
+        <div id="ai-thinking" class="hidden">
+          <span class="dots">Computador pensando</span>
+        </div>
+
         <div class="scoreboard">
           <div class="score-block" data-player="1">
             <span class="score-label">Jogador 1</span>
@@ -41,11 +46,6 @@
       <canvas id="game-canvas">
         Seu browser não suporta Canvas. Atualize para jogar.
       </canvas>
-
-      <!-- AI thinking indicator (only visible in AI mode) -->
-      <div id="ai-thinking" class="hidden">
-        <span class="dots">Computador pensando</span>
-      </div>
 
     </main>
 

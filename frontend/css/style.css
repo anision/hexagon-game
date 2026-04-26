@@ -241,16 +241,21 @@ html, body {
 
 /* ── AI thinking indicator ───────────────────────── */
 
+/* Reserve space so appearing/disappearing never shifts the canvas.
+   Lives inside #game-sidebar. */
 #ai-thinking {
-  margin-top: 12px;
-  font-size: 0.9rem;
+  height: 1.6em;          /* fixed height — always occupies this space */
+  font-size: 0.85rem;
   color: #e63946;
   font-weight: 600;
   letter-spacing: 0.04em;
-  min-height: 1.4em;
+  text-align: center;
+  visibility: visible;
 }
 
-#ai-thinking.hidden { display: none; }
+#ai-thinking.hidden {
+  visibility: hidden;     /* hides text but keeps the space reserved */
+}
 
 @keyframes blink {
   0%, 100% { opacity: 1; }
