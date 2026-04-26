@@ -390,4 +390,46 @@
 > Status do M7: **Done** ✅  
 > **v1 completa!** Todas as milestones (M1–M7) implementadas.
 
+---
+
+### Correção de bug — Validação de placar rejeitava partidas sem tabuleiro cheio
+
+**Desenvolvedor:**
+> joguei novamente e surgiu a mensagem de que não foi possível salvar o resultado.
+
+**Assistente:**
+> Logs do backend mostraram `POST /api/games → 422 Unprocessable Entity`.
+>
+> Causa raiz: o fix de deadlock (jogo termina quando jogador não tem movimentos) gerou uma inconsistência com a validação do backend. Quando o jogo termina antes do tabuleiro estar cheio, `score_player1 + score_player2 < 61`, mas o endpoint exigia que a soma fosse exatamente 61.
+>
+> **Correção (commit `331b9ee`):**
+> - Removida a validação `score_player1 + score_player2 == 61` em `POST /api/games`
+> - Teste atualizado: `test_create_game_invalid_score_returns_422` → `test_create_game_partial_board_returns_201`
+>
+> Testes: 7/7 ✅
+
+---
+
+### Correção de bug — Página de recordes mostrava loading, erro e tabela simultaneamente
+
+**Desenvolvedor:**
+> foi apresentado o dash com as partidas, as vitórias e os placares mas mesmo assim também foi apresentada uma mensagem de erro dizendo que Não foi possível carregar os recordes. Tente novamente e a frase Carregando...
+
+**Assistente:**
+> Bug de CSS: `.hidden` era usada como classe utilitária em todo o HTML (`class="hidden"`) para ocultar elementos, mas nunca havia sido definida como regra global no CSS. Só existiam seletores específicos por ID (`#game-overlay.hidden`, `#save-error.hidden`). Por isso loading, erro e tabela ficavam todos visíveis simultaneamente.
+>
+> **Correção (commit `a7c8450`):**
+> - Adicionado `.hidden { display: none; }` como regra global em `style.css`
+> - Override para `#ai-thinking.hidden`: `display: block + visibility: hidden` para preservar o espaço no layout sem colapsar o elemento
+
+---
+
+### Push para o GitHub
+
+**Desenvolvedor:**
+> O GitHub está atualizado com todas as correções e alterações que realizamos?
+
+**Assistente:**
+> Não estava — 21 commits locais pendentes. Executado `git push origin main` para sincronizar.
+
 <!-- Novas iterações serão adicionadas abaixo -->
