@@ -184,4 +184,30 @@
 
 ---
 
+---
+
+### Testes do M2 e correção de bugs
+
+**Desenvolvedor:**
+> Pode testar por favor?
+
+**Assistente:**
+> Executados os testes do M2. Dois bugs encontrados e corrigidos:
+>
+> | Bug | Causa | Correção |
+> |---|---|---|
+> | `GET /api/players/me` sem token retornava HTTP 403 | `HTTPBearer` retorna 403 por padrão | `auto_error=False` + raise 401 manual |
+> | `GET /api/players/me` com token inválido/expirado retornava HTTP 500 | `greenlet` ausente — SQLAlchemy async falha ao fechar sessão quando há exceção | Adicionado `greenlet==3.1.1` ao requirements |
+>
+> Resultado após correções:
+> - Sem token → HTTP 401 ✅
+> - Token inválido → HTTP 401 ✅
+> - Token expirado → HTTP 401 "Token expirado" ✅
+> - /health → HTTP 200 ✅
+> - Testes unitários JWT: 3/3 ✅
+>
+> Commit de correção: `279c61b`
+
+---
+
 <!-- Novas iterações serão adicionadas abaixo -->
