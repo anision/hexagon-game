@@ -36,24 +36,31 @@ export function update(game) {
  * Show the game-over overlay with the result and final score.
  *
  * @param {HexGame} game
+ * @param {boolean} [saveFailed=false] - show save-error notice when true
  */
-export function showGameOver(game) {
+export function showGameOver(game, saveFailed = false) {
   const counts  = game.board.countPieces();
   const winner  = game.getWinner();
 
-  const overlay = document.getElementById('game-overlay');
-  const msgEl   = document.getElementById('overlay-message');
-  const scoreEl = document.getElementById('overlay-score');
+  const overlay  = document.getElementById('game-overlay');
+  const msgEl    = document.getElementById('overlay-message');
+  const scoreEl  = document.getElementById('overlay-score');
+  const errorEl  = document.getElementById('save-error');
 
   if (!overlay || !msgEl || !scoreEl) return;
 
   let message;
-  if (winner === 'player1')  message = 'Jogador 1 venceu!';
+  if (winner === 'player1')      message = 'Jogador 1 venceu!';
   else if (winner === 'player2') message = 'Jogador 2 venceu!';
   else                           message = 'Empate!';
 
   msgEl.textContent   = message;
   scoreEl.textContent = `${counts.player1} × ${counts.player2}`;
+
+  if (errorEl) {
+    errorEl.classList.toggle('hidden', !saveFailed);
+  }
+
   overlay.classList.remove('hidden');
 }
 

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hexagon — Meus Recordes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/records.css" />
+</head>
+<body>
+  <div id="app">
+
+    <header id="records-header">
+      <button class="btn-back" onclick="window.location.href='mode-select.html'">← Voltar</button>
+      <h1 class="game-title">Meus Recordes</h1>
+      <div id="player-bar"></div>
+    </header>
+
+    <main id="records-main">
+
+      <!-- Stats summary -->
+      <section id="stats-section">
+        <div class="stat-card" id="stat-total">
+          <span class="stat-value">—</span>
+          <span class="stat-label">Partidas</span>
+        </div>
+        <div class="stat-card" id="stat-wins">
+          <span class="stat-value">—</span>
+          <span class="stat-label">Vitórias</span>
+        </div>
+        <div class="stat-card" id="stat-losses">
+          <span class="stat-value">—</span>
+          <span class="stat-label">Derrotas</span>
+        </div>
+        <div class="stat-card" id="stat-draws">
+          <span class="stat-value">—</span>
+          <span class="stat-label">Empates</span>
+        </div>
+        <div class="stat-card" id="stat-winrate">
+          <span class="stat-value">—</span>
+          <span class="stat-label">Taxa de vitória</span>
+        </div>
+      </section>
+
+      <!-- History table -->
+      <section id="history-section">
+        <div id="history-loading" class="loading-msg">Carregando...</div>
+        <div id="history-error" class="error-msg hidden">
+          Não foi possível carregar os recordes. Tente novamente.
+        </div>
+        <table id="history-table" class="hidden">
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Oponente</th>
+              <th>Modo</th>
+              <th>Resultado</th>
+              <th>Placar</th>
+            </tr>
+          </thead>
+          <tbody id="history-body"></tbody>
+        </table>
+        <p id="history-empty" class="empty-msg hidden">Nenhuma partida registrada ainda.</p>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script>
+    if (!Auth.isLoggedIn()) window.location.href = 'login.html';
+
+    const backendUrl = Auth.getBackendUrl();
+
+    async function loadPlayer() {
+      const res = await Auth.fetchWithAuth(backendUrl + '/api/players/me');
+      if (!res) return;
+      const player = await res.json();
+      const bar = document.getElementById('player-bar');
+      const avatar = player.avatar_url
+        ? `<img src="${player.avatar_url}" alt="avatar" class="player-avatar" referrerpolicy="no-referrer" />`
+        : `<div class="player-avatar player-initials">${player.name.charAt(0).toUpperCase()}</div>`;
+      bar.innerHTML = `${avatar}<span class="player-name">${player.name}</span>
+        <button class="btn-logout" onclick="Auth.logout()">Sair</button>`;
+    }
+
+    async function loadStats() {
+      const res = await Auth.fetchWithAuth(backendUrl + '/api/players/me/stats');
+      if (!res || !res.ok) return;
+      const s = await res.json();
+      document.querySelector('#stat-total  .stat-value').textContent = s.total_games;
+      document.querySelector('#stat-wins   .stat-value').textContent = s.wins;
+      document.querySelector('#stat-losses .stat-value').textContent = s.losses;
+      document.querySelector('#stat-draws  .stat-value').textContent = s.draws;
+      document.querySelector('#stat-winrate .stat-value').textContent = s.win_rate + '%';
+    }
+
+    const RESULT_LABEL = { win: 'Vitória', loss: 'Derrota', draw: 'Empate' };
+    const MODE_LABEL   = { pvp: 'vs Jogador', pvc: 'vs Computador' };
+
+    async function loadHistory() {
+      const loadingEl = document.getElementById('history-loading');
+      const errorEl   = document.getElementById('history-error');
+      const tableEl   = document.getElementById('history-table');
+      const emptyEl   = document.getElementById('history-empty');
+      const tbody     = document.getElementById('history-body');
+
+      try {
+        const res = await Auth.fetchWithAuth(backendUrl + '/api/players/me/games');
+        if (!res || !res.ok) throw new Error('failed');
+
+        const games = await res.json();
+        loadingEl.classList.add('hidden');
+
+        if (games.length === 0) {
+          emptyEl.classList.remove('hidden');
+          return;
+        }
+
+        for (const g of games) {
+          const date = new Date(g.played_at).toLocaleDateString('pt-BR');
+          const resultClass = g.result;
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${date}</td>
+            <td>${g.opponent_name}</td>
+            <td>${MODE_LABEL[g.mode] || g.mode}</td>
+            <td class="result-${resultClass}">${RESULT_LABEL[resultClass] || g.result}</td>
+            <td>${g.score_player} × ${g.score_opponent}</td>
+          `;
+          tbody.appendChild(tr);
+        }
+        tableEl.classList.remove('hidden');
+      } catch {
+        loadingEl.classList.add('hidden');
+        errorEl.classList.remove('hidden');
+      }
+    }
+
+    loadPlayer();
+    loadStats();
+    loadHistory();
+  </script>
+</body>
+</html>

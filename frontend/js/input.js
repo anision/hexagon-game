@@ -28,12 +28,13 @@ let _inputAbort = null;
  * Set up the Canvas click handler, replacing any previously registered one.
  *
  * @param {HTMLCanvasElement} canvas
- * @param {HexGame}           game         — engine instance
- * @param {object}            renderer     — { hexSize, cx, cy }
- * @param {object}            ui           — { update, showGameOver }
- * @param {Function}          [onMove]     — called after each successful move (optional)
+ * @param {HexGame}           game           — engine instance
+ * @param {object}            renderer       — { hexSize, cx, cy }
+ * @param {object}            ui             — { update, showGameOver }
+ * @param {Function}          [onMove]       — called after each move when game continues
+ * @param {Function}          [onGameOver]   — async, called instead of ui.showGameOver when game ends
  */
-export function setupInput(canvas, game, renderer, ui, onMove) {
+export function setupInput(canvas, game, renderer, ui, onMove, onGameOver) {
   // Remove previous listener before attaching a new one (restart support)
   if (_inputAbort) _inputAbort.abort();
   _inputAbort = new AbortController();
@@ -68,7 +69,7 @@ export function setupInput(canvas, game, renderer, ui, onMove) {
       game.move(fq, fr, q, r);
       state.lastMove = { from: [fq, fr], to: [q, r] };
       _clearSelection();
-      _afterMove(canvas, game, renderer, ui, prevCounts, onMove);
+      _afterMove(canvas, game, renderer, ui, prevCounts, onMove, onGameOver);
       return;
     }
 
@@ -80,7 +81,7 @@ export function setupInput(canvas, game, renderer, ui, onMove) {
       game.move(fq, fr, q, r);
       state.lastMove = { from: [fq, fr], to: [q, r] };
       _clearSelection();
-      _afterMove(canvas, game, renderer, ui, prevCounts, onMove);
+      _afterMove(canvas, game, renderer, ui, prevCounts, onMove, onGameOver);
       return;
     }
 
@@ -121,9 +122,8 @@ function _redraw(canvas, game, renderer) {
   );
 }
 
-function _afterMove(canvas, game, renderer, ui, prevCounts, onMove) {
+function _afterMove(canvas, game, renderer, ui, prevCounts, onMove, onGameOver) {
   const counts = game.board.countPieces();
-  // Conquest happened if the opponent lost pieces compared to before the move
   const opponent = game.currentPlayer === 'player1' ? 'player2' : 'player1';
   const hadConquest = counts[opponent] < prevCounts[opponent];
 
@@ -131,7 +131,11 @@ function _afterMove(canvas, game, renderer, ui, prevCounts, onMove) {
   ui.update(game);
 
   if (game.isGameOver()) {
-    ui.showGameOver(game);
+    if (onGameOver) {
+      onGameOver(game);   // async — handles save + showGameOver
+    } else {
+      ui.showGameOver(game);
+    }
     return;
   }
 

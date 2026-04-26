@@ -9,6 +9,7 @@ import { HexGame }    from './engine/game.js';
 import { drawBoard, resizeCanvas } from './renderer.js';
 import { setupInput, state as inputState } from './input.js';
 import { getBestMove } from './ai.js';
+import { saveGame }   from './records.js';
 import * as ui        from './ui.js';
 
 // ─── Auth ─────────────────────────────────────────────────────────────────
@@ -31,6 +32,9 @@ const canvas     = document.getElementById('game-canvas');
 const btnRestart = document.getElementById('btn-restart');
 const aiThinking = document.getElementById('ai-thinking');
 
+// ─── Player identity (loaded async, used for game recording) ──────────────
+let currentPlayerId = null;
+
 // ─── Renderer geometry ────────────────────────────────────────────────────
 const rendererState = { hexSize: 0, cx: 0, cy: 0 };
 
@@ -45,6 +49,12 @@ let game;
 
 function redrawClean() {
   drawBoard(canvas.getContext('2d'), game.board, null, [], [], inputState.lastMove);
+}
+
+// ─── Game over handler (save + show overlay) ──────────────────────────────
+async function handleGameOver(g) {
+  const saved = await saveGame(g, gameMode, currentPlayerId);
+  ui.showGameOver(g, !saved);
 }
 
 // ─── AI move ─────────────────────────────────────────────────────────────
@@ -68,7 +78,7 @@ function scheduleAiMove() {
     ui.update(game);
 
     if (game.isGameOver()) {
-      ui.showGameOver(game);
+      await handleGameOver(game);
     }
   }, 800);
 }
@@ -91,7 +101,7 @@ function initGame() {
   ui.hideGameOver();
 
   const onMove = gameMode === 'ai' ? scheduleAiMove : null;
-  setupInput(canvas, game, rendererState, ui, onMove);
+  setupInput(canvas, game, rendererState, ui, onMove, handleGameOver);
 }
 
 // ─── Resize ───────────────────────────────────────────────────────────────
@@ -111,6 +121,7 @@ async function loadProfile() {
   const res = await Auth.fetchWithAuth(`${Auth.getBackendUrl()}/api/players/me`);
   if (!res) return;
   const player = await res.json();
+  currentPlayerId = player.id;
   const header = document.getElementById('game-header');
   const avatar = player.avatar_url
     ? `<img src="${player.avatar_url}" alt="avatar" class="player-avatar" referrerpolicy="no-referrer" />`
