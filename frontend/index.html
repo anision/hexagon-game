@@ -11,18 +11,51 @@
 </head>
 <body>
   <div id="app">
+
+    <!-- ── Header ── -->
     <header id="game-header">
       <h1 class="game-title">Hexagon</h1>
     </header>
 
+    <!-- ── Game area ── -->
     <main id="game-main">
-      <canvas id="game-canvas" width="800" height="700">
+
+      <!-- Sidebar: turn + score -->
+      <aside id="game-sidebar">
+        <div id="turn-indicator" data-player="1">Vez do Jogador 1</div>
+
+        <div class="scoreboard">
+          <div class="score-block" data-player="1">
+            <span class="score-label">Jogador 1</span>
+            <span class="score-value" id="score-p1">3</span>
+          </div>
+          <div class="score-separator">×</div>
+          <div class="score-block" data-player="2">
+            <span class="score-label">Jogador 2</span>
+            <span class="score-value" id="score-p2">3</span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Canvas -->
+      <canvas id="game-canvas">
         Seu browser não suporta Canvas. Atualize para jogar.
       </canvas>
+
     </main>
+
+    <!-- ── Game-over overlay ── -->
+    <div id="game-overlay" class="hidden">
+      <div id="overlay-content">
+        <p id="overlay-message">Fim de jogo!</p>
+        <p id="overlay-score"></p>
+        <button id="btn-restart">Jogar novamente</button>
+      </div>
+    </div>
+
   </div>
 
   <script src="js/auth.js"></script>
-  <script src="js/main.js"></script>
+  <script type="module" src="js/main.js"></script>
 </body>
 </html>

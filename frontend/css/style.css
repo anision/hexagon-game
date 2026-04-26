@@ -109,3 +109,132 @@ html, body {
   background: #4361ee;
   color: #fff;
 }
+
+/* ── Game layout ─────────────────────────────── */
+
+#game-main {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+/* ── Sidebar: turn + scoreboard ──────────────── */
+
+#game-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 160px;
+}
+
+#turn-indicator {
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-align: center;
+  background: #16213e;
+  color: #e2e8f0;
+  border: 2px solid #16213e;
+  transition: border-color 0.2s;
+}
+
+#turn-indicator[data-player="1"] { border-color: #4361ee; color: #4361ee; }
+#turn-indicator[data-player="2"] { border-color: #e63946; color: #e63946; }
+
+.scoreboard {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: #16213e;
+  border-radius: 8px;
+  padding: 14px 10px;
+}
+
+.score-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.score-label {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.score-block[data-player="1"] .score-value { color: #4361ee; }
+.score-block[data-player="2"] .score-value { color: #e63946; }
+
+.score-value {
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.score-separator {
+  font-size: 1.2rem;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+/* ── Game-over overlay ───────────────────────── */
+
+#game-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 10, 20, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+#game-overlay.hidden {
+  display: none;
+}
+
+#overlay-content {
+  background: #16213e;
+  border: 2px solid #4361ee;
+  border-radius: 12px;
+  padding: 40px 48px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+#overlay-message {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #e2e8f0;
+}
+
+#overlay-score {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #4361ee;
+}
+
+#btn-restart {
+  background: #4361ee;
+  color: #fff;
+  border: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 12px 28px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: 8px;
+}
+
+#btn-restart:hover {
+  background: #3451d1;
+}
