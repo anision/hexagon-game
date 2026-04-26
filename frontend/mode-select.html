@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hexagon — Escolher modo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/mode-select.css" />
+</head>
+<body>
+  <div id="app">
+
+    <header id="mode-header">
+      <h1 class="game-title">Hexagon</h1>
+      <div id="player-bar"></div>
+    </header>
+
+    <main id="mode-main">
+      <h2 class="mode-title">Escolha o modo de jogo</h2>
+
+      <div class="mode-cards">
+
+        <button class="mode-card" id="btn-hotseat">
+          <div class="mode-icon">👥</div>
+          <div class="mode-name">Jogador vs Jogador</div>
+          <div class="mode-desc">Dois jogadores no mesmo browser, se alternando</div>
+        </button>
+
+        <button class="mode-card" id="btn-ai">
+          <div class="mode-icon">🤖</div>
+          <div class="mode-name">Jogador vs Computador</div>
+          <div class="mode-desc">Jogue contra a IA. Você é o Jogador 1</div>
+        </button>
+
+      </div>
+    </main>
+
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script>
+    // Auth guard
+    const params = new URLSearchParams(window.location.search);
+    const tokenFromUrl = params.get('token');
+    if (tokenFromUrl) {
+      Auth.setToken(tokenFromUrl);
+      history.replaceState({}, document.title, window.location.pathname);
+    }
+    if (!Auth.isLoggedIn()) {
+      window.location.href = 'login.html';
+    }
+
+    // Load player info
+    async function loadPlayer() {
+      const res = await Auth.fetchWithAuth(Auth.getBackendUrl() + '/api/players/me');
+      if (!res) return;
+      const player = await res.json();
+      const bar = document.getElementById('player-bar');
+      const avatar = player.avatar_url
+        ? `<img src="${player.avatar_url}" alt="avatar" class="player-avatar" />`
+        : `<div class="player-avatar player-initials">${player.name.charAt(0).toUpperCase()}</div>`;
+      bar.innerHTML = `
+        ${avatar}
+        <span class="player-name">${player.name}</span>
+        <button class="btn-logout" onclick="Auth.logout()">Sair</button>
+      `;
+    }
+    loadPlayer();
+
+    // Mode buttons
+    document.getElementById('btn-hotseat').addEventListener('click', () => {
+      window.location.href = 'index.html?mode=hotseat';
+    });
+    document.getElementById('btn-ai').addEventListener('click', () => {
+      window.location.href = 'index.html?mode=ai';
+    });
+  </script>
+</body>
+</html>

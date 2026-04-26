@@ -18,6 +18,7 @@ export const state = {
   longMoves:    [],     // [q, r][]
   lastMove:     null,   // { from: [q,r], to: [q,r] } | null
   isAnimating:  false,
+  isAiTurn:     false,  // blocks human clicks during AI turn
 };
 
 // AbortController to remove the previous listener on restart
@@ -27,18 +28,19 @@ let _inputAbort = null;
  * Set up the Canvas click handler, replacing any previously registered one.
  *
  * @param {HTMLCanvasElement} canvas
- * @param {HexGame}           game     — engine instance
- * @param {object}            renderer — { hexSize, cx, cy }
- * @param {object}            ui       — { update, showGameOver }
+ * @param {HexGame}           game         — engine instance
+ * @param {object}            renderer     — { hexSize, cx, cy }
+ * @param {object}            ui           — { update, showGameOver }
+ * @param {Function}          [onMove]     — called after each successful move (optional)
  */
-export function setupInput(canvas, game, renderer, ui) {
+export function setupInput(canvas, game, renderer, ui, onMove) {
   // Remove previous listener before attaching a new one (restart support)
   if (_inputAbort) _inputAbort.abort();
   _inputAbort = new AbortController();
 
   canvas.addEventListener('click', (event) => {
-    // Block clicks during flash animation
-    if (state.isAnimating) return;
+    // Block clicks during flash animation or AI turn
+    if (state.isAnimating || state.isAiTurn) return;
 
     const rect = canvas.getBoundingClientRect();
     const scaleX = canvas.width  / rect.width;
@@ -66,7 +68,7 @@ export function setupInput(canvas, game, renderer, ui) {
       game.move(fq, fr, q, r);
       state.lastMove = { from: [fq, fr], to: [q, r] };
       _clearSelection();
-      _afterMove(canvas, game, renderer, ui, prevCounts);
+      _afterMove(canvas, game, renderer, ui, prevCounts, onMove);
       return;
     }
 
@@ -78,7 +80,7 @@ export function setupInput(canvas, game, renderer, ui) {
       game.move(fq, fr, q, r);
       state.lastMove = { from: [fq, fr], to: [q, r] };
       _clearSelection();
-      _afterMove(canvas, game, renderer, ui, prevCounts);
+      _afterMove(canvas, game, renderer, ui, prevCounts, onMove);
       return;
     }
 
@@ -119,7 +121,7 @@ function _redraw(canvas, game, renderer) {
   );
 }
 
-function _afterMove(canvas, game, renderer, ui, prevCounts) {
+function _afterMove(canvas, game, renderer, ui, prevCounts, onMove) {
   const counts = game.board.countPieces();
   // Conquest happened if the opponent lost pieces compared to before the move
   const opponent = game.currentPlayer === 'player1' ? 'player2' : 'player1';
@@ -132,6 +134,8 @@ function _afterMove(canvas, game, renderer, ui, prevCounts) {
     ui.showGameOver(game);
     return;
   }
+
+  if (onMove) onMove();
 
   if (hadConquest) {
     state.isAnimating = true;

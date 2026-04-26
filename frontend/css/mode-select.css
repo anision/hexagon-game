@@ -1,0 +1,82 @@
+/* ── Mode selection screen ─────────────────────────────── */
+
+#mode-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 640px;
+}
+
+#player-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#mode-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  width: 100%;
+  max-width: 640px;
+  margin-top: 20px;
+}
+
+.mode-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #94a3b8;
+  letter-spacing: 0.04em;
+}
+
+.mode-cards {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+}
+
+.mode-card {
+  flex: 1;
+  min-width: 220px;
+  max-width: 280px;
+  background: #16213e;
+  border: 2px solid #1e3a5f;
+  border-radius: 14px;
+  padding: 36px 24px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  transition: border-color 0.2s, transform 0.15s;
+  font-family: 'Inter', sans-serif;
+  color: #e2e8f0;
+  text-align: center;
+}
+
+.mode-card:hover {
+  transform: translateY(-4px);
+}
+
+#btn-hotseat:hover { border-color: #4361ee; }
+#btn-ai:hover      { border-color: #e63946; }
+
+.mode-icon {
+  font-size: 2.8rem;
+  line-height: 1;
+}
+
+.mode-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.mode-desc {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  line-height: 1.5;
+}

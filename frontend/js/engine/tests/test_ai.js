@@ -111,33 +111,31 @@ console.log('\ngreedy AI — short-move priority');
 test('prefers short move over long move when capture count is equal', () => {
   const game = new HexGame();
 
-  // player1 at (0,0). One player2 piece at (1,0) (short target) and one at (2,0) (long target).
-  // Short move to (1,0) is invalid (occupied). Use a scenario where both are valid destinations.
+  // Scenario: player1 at (0,0), player2 at (2,0).
   //
-  // player1 at (0,0).
-  // Destination A (short): (1,-1) — has 1 player2 neighbour at (1,0)
-  // Destination B (long):  (2,-2) — has 1 player2 neighbour at (1,0) ... let's verify:
-  //   neighbours of (2,-2): (3,-2),(1,-2),(2,-1),(2,-3),(3,-3),(1,-1) — (1,0) not among them.
-  // Let's use a cleaner scenario:
-  // player1 at (-2,0), player2 at (-1,0).
-  // Short move to (-1,-1): neighbours include (-1,0)? neighbours of (-1,-1): (0,-1),(-2,0),(0,-2),(-2,1),(-1,0),(-1,-2) → YES captures (-1,0) ✓ score=1, isShort=true
-  // Long move to (0,-2): neighbours of (0,-2): (1,-2),(-1,-2),(0,-1),(0,-3),(1,-3),(-1,-1) → (-1,0) not here → score=0
-  // Long move to (0,0): neighbours of (0,0): (1,0),(-1,0),(0,1),(0,-1),(1,-1),(-1,1) → captures (-1,0) ✓ score=1, isShort=false
-  // So we have short=(-1,-1) score=1 vs long=(0,0) score=1 → should pick short.
+  // Short move (0,0)→(1,0): neighbours of (1,0) = (2,0)[p2] → score=1, isShort=true
+  //   All other short targets ((-1,0),(0,1),(0,-1),(1,-1),(-1,1)) do NOT have (2,0) as neighbour → score=0
+  //
+  // Long moves from (0,0): (2,0) is occupied (p2), so not a valid target.
+  //   (1,1): neighbours = (2,1),(0,1),(1,2),(1,0),(2,0)[p2],(0,2) → score=1, isShort=false
+  //   (2,-1): neighbours = (3,-1),(1,-1),(2,0)[p2],(2,-2),(3,-2),(1,0) → score=1, isShort=false
+  //   Other long targets score 0.
+  //
+  // Result: short (1,0) and long (1,1),(2,-1) all score 1 → short wins.
 
   for (const [key] of game.board.cells) {
     const [q, r] = key.split(',').map(Number);
     game.board.set(q, r, 'empty');
   }
-  game.board.set(-2,  0, 'player1');
-  game.board.set(-1,  0, 'player2');
+  game.board.set(0, 0, 'player1');
+  game.board.set(2, 0, 'player2');
 
   const move = getBestMove(game);
   assert.ok(move !== null);
-  assert.ok(move.isShort === undefined || true, 'move returned'); // getBestMove doesn't expose isShort
-  // The move should be the short one: (-2,0)→(-1,-1)
-  assert.strictEqual(move.toQ, -1, `expected toQ=-1, got ${move.toQ}`);
-  assert.strictEqual(move.toR, -1, `expected toR=-1, got ${move.toR}`);
+  assert.strictEqual(move.fromQ, 0, `fromQ=${move.fromQ}`);
+  assert.strictEqual(move.fromR, 0, `fromR=${move.fromR}`);
+  assert.strictEqual(move.toQ,   1, `expected toQ=1 (short), got ${move.toQ}`);
+  assert.strictEqual(move.toR,   0, `expected toR=0 (short), got ${move.toR}`);
 });
 
 // ─── Summary ─────────────────────────────────────────────────────────────────

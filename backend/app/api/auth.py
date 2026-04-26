@@ -62,4 +62,4 @@ async def auth_callback(request: Request):
             await db.commit()
 
     jwt_token = create_access_token({"sub": user_info["sub"]})
-    return RedirectResponse(url=f"{settings.ALLOWED_ORIGIN}/?token={jwt_token}")
+    return RedirectResponse(url=f"{settings.ALLOWED_ORIGIN}/mode-select.html?token={jwt_token}")

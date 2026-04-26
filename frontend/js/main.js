@@ -1,40 +1,38 @@
 /**
  * main.js — Bootstrap for Hexagon
  *
- * Connects the game engine (M3) to the Canvas renderer, click input handler
- * and DOM UI. Manages game lifecycle: init → play → game over → restart.
+ * Reads ?mode=hotseat|ai from the URL.
+ * In AI mode, schedules the AI move (800ms delay) after each human move.
  */
 
 import { HexGame }    from './engine/game.js';
 import { drawBoard, resizeCanvas } from './renderer.js';
 import { setupInput, state as inputState } from './input.js';
+import { getBestMove } from './ai.js';
 import * as ui        from './ui.js';
 
-// ─── Auth: capture token from OAuth callback URL ───────────────────────────
+// ─── Auth ─────────────────────────────────────────────────────────────────
 const params = new URLSearchParams(window.location.search);
 const tokenFromUrl = params.get('token');
 if (tokenFromUrl) {
   Auth.setToken(tokenFromUrl);
-  history.replaceState({}, document.title, '/');
+  const cleanUrl = window.location.pathname + '?mode=' + (params.get('mode') || 'hotseat');
+  history.replaceState({}, document.title, cleanUrl);
 }
-
 if (!Auth.isLoggedIn()) {
   window.location.href = 'login.html';
 }
 
-// ─── DOM references ────────────────────────────────────────────────────────
+// ─── Mode ─────────────────────────────────────────────────────────────────
+const gameMode = params.get('mode') === 'ai' ? 'ai' : 'hotseat';
+
+// ─── DOM ──────────────────────────────────────────────────────────────────
 const canvas     = document.getElementById('game-canvas');
 const btnRestart = document.getElementById('btn-restart');
+const aiThinking = document.getElementById('ai-thinking');
 
-// ─── Renderer geometry (shared with input.js) ─────────────────────────────
-const rendererState = {
-  hexSize: 0,
-  cx: 0,
-  cy: 0,
-};
-
-// ─── Game instance ─────────────────────────────────────────────────────────
-let game;
+// ─── Renderer geometry ────────────────────────────────────────────────────
+const rendererState = { hexSize: 0, cx: 0, cy: 0 };
 
 function computeRendererGeometry() {
   rendererState.hexSize = Math.floor(Math.min(canvas.width, canvas.height) / 14);
@@ -42,29 +40,58 @@ function computeRendererGeometry() {
   rendererState.cy      = canvas.height / 2;
 }
 
-/** Draw the board without any active selection (used on init and resize). */
+// ─── Game instance ────────────────────────────────────────────────────────
+let game;
+
 function redrawClean() {
-  const ctx = canvas.getContext('2d');
-  drawBoard(ctx, game.board, null, [], [], inputState.lastMove);
+  drawBoard(canvas.getContext('2d'), game.board, null, [], [], inputState.lastMove);
 }
 
-/** Create a new game, reset all state, redraw, and wire up input. */
+// ─── AI move ─────────────────────────────────────────────────────────────
+function scheduleAiMove() {
+  if (game.isGameOver() || game.currentPlayer !== 'player2') return;
+
+  inputState.isAiTurn = true;
+  if (aiThinking) aiThinking.classList.remove('hidden');
+
+  setTimeout(() => {
+    const move = getBestMove(game);
+    if (move) {
+      game.move(move.fromQ, move.fromR, move.toQ, move.toR);
+      inputState.lastMove = { from: [move.fromQ, move.fromR], to: [move.toQ, move.toR] };
+    }
+
+    if (aiThinking) aiThinking.classList.add('hidden');
+    inputState.isAiTurn = false;
+
+    redrawClean();
+    ui.update(game);
+
+    if (game.isGameOver()) {
+      ui.showGameOver(game);
+    }
+  }, 800);
+}
+
+// ─── Init ─────────────────────────────────────────────────────────────────
 function initGame() {
-  // Reset input selection state
   inputState.selectedCell = null;
   inputState.shortMoves   = [];
   inputState.longMoves    = [];
   inputState.lastMove     = null;
   inputState.isAnimating  = false;
+  inputState.isAiTurn     = false;
+
+  if (aiThinking) aiThinking.classList.add('hidden');
 
   game = new HexGame();
-
   computeRendererGeometry();
   redrawClean();
   ui.update(game);
   ui.hideGameOver();
 
-  setupInput(canvas, game, rendererState, ui);
+  const onMove = gameMode === 'ai' ? scheduleAiMove : null;
+  setupInput(canvas, game, rendererState, ui, onMove);
 }
 
 // ─── Resize ───────────────────────────────────────────────────────────────
@@ -74,26 +101,24 @@ window.addEventListener('resize', () => {
   redrawClean();
 });
 
-// ─── Restart button ───────────────────────────────────────────────────────
+// ─── Restart → mode selection ─────────────────────────────────────────────
 btnRestart.addEventListener('click', () => {
-  initGame();
+  window.location.href = 'mode-select.html';
 });
 
-// ─── Player profile in header ─────────────────────────────────────────────
+// ─── Player profile ───────────────────────────────────────────────────────
 async function loadProfile() {
-  const response = await Auth.fetchWithAuth(`${Auth.getBackendUrl()}/api/players/me`);
-  if (!response) return;
-
-  const player = await response.json();
+  const res = await Auth.fetchWithAuth(`${Auth.getBackendUrl()}/api/players/me`);
+  if (!res) return;
+  const player = await res.json();
   const header = document.getElementById('game-header');
-  const avatarHtml = player.avatar_url
+  const avatar = player.avatar_url
     ? `<img src="${player.avatar_url}" alt="avatar" class="player-avatar" />`
     : `<div class="player-avatar player-initials">${player.name.charAt(0).toUpperCase()}</div>`;
-
   header.innerHTML = `
     <h1 class="game-title">Hexagon</h1>
     <div class="player-info">
-      ${avatarHtml}
+      ${avatar}
       <span class="player-name">${player.name}</span>
       <button class="btn-logout" onclick="Auth.logout()">Sair</button>
     </div>

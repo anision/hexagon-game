@@ -238,3 +238,27 @@ html, body {
 #btn-restart:hover {
   background: #3451d1;
 }
+
+/* ── AI thinking indicator ───────────────────────── */
+
+#ai-thinking {
+  margin-top: 12px;
+  font-size: 0.9rem;
+  color: #e63946;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  min-height: 1.4em;
+}
+
+#ai-thinking.hidden { display: none; }
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.2; }
+}
+
+#ai-thinking .dots::after {
+  content: '...';
+  display: inline-block;
+  animation: blink 1s step-start infinite;
+}
