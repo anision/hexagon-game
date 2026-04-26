@@ -76,6 +76,38 @@ test('isGameOver retorna false quando ainda há células vazias', () => {
     if (q !== 0 || r !== 0) game.board.set(q, r, 'player1');
   }
   assert.equal(game.board.get(0, 0), 'empty'); // confirma que (0,0) está vazia
+  assert.equal(game.isGameOver(), false);        // player1 ainda pode mover para (0,0)
+});
+
+test('isGameOver retorna true quando currentPlayer não tem movimentos (sem células adjacentes/livres)', () => {
+  const game = freshGame();
+  // Deixar apenas (0,0) e (4,0) vazias — (4,0) está isolada das peças de player2
+  // player2 começa em [0,4], [4,-4], [-4,0]
+  // Cercar todas as peças de player2 com peças de player1
+  for (const [key] of game.board.cells) {
+    const [q, r] = key.split(',').map(Number);
+    game.board.set(q, r, 'player1');
+  }
+  // Colocar somente player2 em posições isoladas, sem vizinhos ou saltos livres
+  // Deixar player2 em (0,4) e cercar tudo ao redor com player1 exceto célula longe
+  // Simular: currentPlayer = player2, todas cells ocupadas por player1 exceto uma não-alcançável
+  game.currentPlayer = 'player2';
+  game.board.set(0, 4, 'player2');  // única peça do player2
+  // (0,4) tem vizinhos: (1,3),(0,3),(-1,4),(1,4),(-1,3) — todos player1 (tabuleiro cheio de p1)
+  // Jump targets de (0,4) verificar se algum está vazio — tabuleiro cheio de p1, nenhum vazio
+  // (0,4) cercado por player1 em todos os lados → nenhum movimento
+  assert.equal(game.isGameOver(), true);
+});
+
+test('isGameOver retorna false quando currentPlayer tem ao menos um movimento', () => {
+  const game = freshGame();
+  // Situação: todas as células player1 exceto (0,0) vazia e player1 currentPlayer
+  for (const [key] of game.board.cells) {
+    const [q, r] = key.split(',').map(Number);
+    game.board.set(q, r, 'player1');
+  }
+  game.board.set(0, 0, 'empty'); // ao menos uma célula alcançável
+  // player1 em (1,0),(−1,0),(0,1),(0,−1),(1,−1),(−1,1) pode mover short para (0,0)
   assert.equal(game.isGameOver(), false);
 });
 

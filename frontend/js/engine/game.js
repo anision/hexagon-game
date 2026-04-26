@@ -77,8 +77,18 @@ export class HexGame {
     this.currentPlayer = this.currentPlayer === 'player1' ? 'player2' : 'player1';
   }
 
+  _currentPlayerHasMoves() {
+    for (const [key, owner] of this.board.cells) {
+      if (owner !== this.currentPlayer) continue;
+      const [q, r] = key.split(',').map(Number);
+      const { shortMoves, longMoves } = this.getValidMoves(q, r);
+      if (shortMoves.length > 0 || longMoves.length > 0) return true;
+    }
+    return false;
+  }
+
   isGameOver() {
-    return this.board.countPieces().empty === 0;
+    return this.board.countPieces().empty === 0 || !this._currentPlayerHasMoves();
   }
 
   getWinner() {
