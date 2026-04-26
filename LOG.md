@@ -329,4 +329,43 @@
 
 ---
 
+---
+
+### Correção de bug no M6 — Stats contavam empate em vez de derrota
+
+**Desenvolvedor:**
+> o jogo funcionou, joguei a partida toda e ao final apareceu a mensagem de que não foi possivel savar o resultado.
+
+**Assistente:**
+> Investigação do backend: `POST /api/games → 201 Created` — o save funcionou. A mensagem de erro foi transiente (sessão anterior com código quebrado).
+>
+> Bug identificado nos stats: com 61 células (total ímpar), empates são matematicamente impossíveis. Quando `winner_id = null`, significa que o jogador 2 venceu — deve ser contado como **derrota** para o player1, não como empate.
+>
+> **Correções aplicadas (commit `f22e4dd`):**
+> - `GET /api/players/me/stats`: removido cálculo de `draws` via SQL; agora `losses = total - wins`, `draws = 0`
+> - `GET /api/players/me/games`: resultado `winner_id = null` retornava `"draw"`, corrigido para `"loss"`
+> - Testes atualizados para refletir o comportamento correto
+>
+> Testes: 7/7 ✅
+
+---
+
+---
+
+### Correção de bug — Jogo travado quando jogador não tem movimentos
+
+**Desenvolvedor:**
+> Antes de partirmos para o M7 há um bug na lógica do game que precisa ser corrigida. Jogando contra a IA cheguei a um cenário onde o jogador 2 não consegue fazer mais nenhum movimento mas o jogo ainda não terminou. Dessa forma o jogo ficou travado sem poder terminar porque é a vez do jogador 2 mas as peças dele não podem ser movimentadas.
+
+**Assistente:**
+> Bug confirmado: `isGameOver()` só verificava `empty === 0` (tabuleiro cheio). Não tratava o caso em que o jogador atual não tem movimentos válidos.
+>
+> **Correção (commit `728216d`):**
+> - `game.js`: adicionado `_currentPlayerHasMoves()` que percorre todas as células do jogador atual e retorna `true` se qualquer peça tiver ao menos um movimento válido
+> - `isGameOver()` expandido: `return empty === 0 || !this._currentPlayerHasMoves()`
+> - `getWinner()` já funcionava corretamente — compara contagem de peças independente do motivo do fim
+> - 2 novos testes adicionados em `test_game_state.js`
+>
+> Testes: 63/63 ✅ (todos os arquivos de teste do frontend)
+
 <!-- Novas iterações serão adicionadas abaixo -->

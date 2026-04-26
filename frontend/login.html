@@ -8,57 +8,13 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
-  <style>
-    .login-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      gap: 32px;
-    }
-    .login-title {
-      font-size: 3rem;
-      font-weight: 700;
-      letter-spacing: 0.15em;
-      color: #e2e8f0;
-    }
-    .login-subtitle {
-      font-size: 1rem;
-      color: #94a3b8;
-    }
-    .btn-google {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: #ffffff;
-      color: #1a1a2e;
-      font-family: 'Inter', sans-serif;
-      font-size: 1rem;
-      font-weight: 600;
-      padding: 12px 24px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      text-decoration: none;
-      transition: opacity 0.2s;
-    }
-    .btn-google:hover { opacity: 0.9; }
-    .btn-google svg { width: 20px; height: 20px; }
-    .error-msg {
-      color: #e63946;
-      font-size: 0.9rem;
-      display: none;
-    }
-    .error-msg.visible { display: block; }
-  </style>
 </head>
 <body>
   <div class="login-container">
     <h1 class="login-title">Hexagon</h1>
     <p class="login-subtitle">Jogue contra um amigo ou contra o computador</p>
 
-    <p id="error-msg" class="error-msg">Login cancelado. Tente novamente.</p>
+    <p id="error-msg" class="login-error">Login cancelado. Tente novamente.</p>
 
     <a id="btn-google" class="btn-google" href="/auth/google">
       <!-- Google logo SVG -->
@@ -72,6 +28,10 @@
     </a>
   </div>
 
+  <div id="toast-container"></div>
+
+  <script src="config.js"></script>
+  <script src="js/auth.js"></script>
   <script>
     const params = new URLSearchParams(window.location.search);
     if (params.get('error') === 'login_cancelled') {

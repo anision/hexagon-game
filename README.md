@@ -98,6 +98,64 @@ hexagon-game/
 └── .env.example
 ```
 
-## Deploy
+## Deploy (Produção)
 
-Veja a seção de deploy em `.specs/features/m7-deploy/spec.md` para instruções de produção com `docker-compose.prod.yml`.
+### Pré-requisitos
+
+- Servidor Linux com [Docker](https://docs.docker.com/get-docker/) 24+ e Docker Compose v2+
+- Portas 80 (HTTP) liberadas no firewall
+- Credenciais Google OAuth2 configuradas para o domínio/IP de produção
+
+### 1. Clonar o repositório no servidor
+
+```bash
+git clone https://github.com/anision/hexagon-game.git
+cd hexagon-game
+```
+
+### 2. Configurar variáveis de ambiente
+
+```bash
+cp .env.example .env
+```
+
+Edite o `.env` com os valores de produção:
+
+| Variável | Descrição |
+|---|---|
+| `SECRET_KEY` | Chave secreta longa e aleatória para JWT (mínimo 32 chars) |
+| `GOOGLE_CLIENT_ID` | Client ID do Google OAuth2 |
+| `GOOGLE_CLIENT_SECRET` | Client Secret do Google OAuth2 |
+| `POSTGRES_PASSWORD` | Senha forte para o banco de dados |
+| `ALLOWED_ORIGIN` | URL pública do servidor, ex: `http://SEU_IP` |
+
+> **Google OAuth2 em produção:** Acesse o [Google Cloud Console](https://console.cloud.google.com/), abra as credenciais do projeto e adicione a URI de redirecionamento de produção (ex: `http://SEU_IP/auth/callback`) em "URIs de redirecionamento autorizados". O callback é gerado automaticamente pelo backend com base no host da requisição.
+
+### 3. Subir em produção
+
+```bash
+docker compose -f docker-compose.prod.yml up -d --build
+```
+
+O que sobe:
+- **Nginx** na porta 80 — serve o frontend e faz proxy reverso para o backend
+- **Backend** (FastAPI + Gunicorn com 2 workers) — não exposto externamente
+- **PostgreSQL** — não exposto externamente
+
+### 4. Acessar
+
+```
+http://SEU_IP_OU_DOMINIO/
+```
+
+### 5. Ver logs
+
+```bash
+docker compose -f docker-compose.prod.yml logs -f
+```
+
+### 6. Parar
+
+```bash
+docker compose -f docker-compose.prod.yml down
+```

@@ -267,3 +267,146 @@ html, body {
   display: inline-block;
   animation: blink 1s step-start infinite;
 }
+
+/* ── Save-error in overlay ───────────────────── */
+
+#save-error {
+  font-size: 0.82rem;
+  color: #e63946;
+}
+#save-error.hidden { display: none; }
+
+/* ── Disabled button state ───────────────────── */
+
+button:disabled,
+.btn-logout:disabled,
+#btn-restart:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ── Login page ──────────────────────────────── */
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  gap: 32px;
+}
+
+.login-title {
+  font-size: 3rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: #e2e8f0;
+}
+
+.login-subtitle {
+  font-size: 1rem;
+  color: #94a3b8;
+}
+
+.btn-google {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #ffffff;
+  color: #1a1a2e;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+.btn-google:hover  { opacity: 0.9; }
+.btn-google svg    { width: 20px; height: 20px; }
+
+.login-error {
+  color: #e63946;
+  font-size: 0.9rem;
+  display: none;
+}
+.login-error.visible { display: block; }
+
+/* ── Toast / snackbar ───────────────────────── */
+
+#toast-container {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  z-index: 200;
+  pointer-events: none;
+}
+
+.toast {
+  background: #16213e;
+  border: 1px solid #4361ee;
+  color: #e2e8f0;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  padding: 12px 20px;
+  border-radius: 8px;
+  max-width: 360px;
+  text-align: center;
+  animation: toast-in 0.2s ease;
+}
+
+.toast.toast-error { border-color: #e63946; color: #e63946; }
+.toast.toast-warn  { border-color: #fbbf24; color: #fbbf24; }
+
+.toast.toast-hide {
+  animation: toast-out 0.3s ease forwards;
+}
+
+@keyframes toast-in  { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@keyframes toast-out { from { opacity: 1; } to { opacity: 0; transform: translateY(8px); } }
+
+/* ── Mobile warning (< 600px) ────────────────── */
+
+#mobile-warning {
+  display: none;
+  background: #16213e;
+  border: 1px solid #fbbf24;
+  color: #fbbf24;
+  font-size: 0.85rem;
+  text-align: center;
+  padding: 10px 16px;
+  border-radius: 8px;
+  max-width: 400px;
+}
+
+@media (max-width: 599px) {
+  #mobile-warning { display: block; }
+}
+
+/* ── Responsive canvas ───────────────────────── */
+
+@media (max-width: 1023px) {
+  #game-main {
+    flex-direction: column;
+    align-items: center;
+  }
+  #game-sidebar {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    min-width: unset;
+    width: 100%;
+    max-width: 600px;
+  }
+  #game-canvas {
+    max-width: calc(100vw - 40px);
+  }
+}
