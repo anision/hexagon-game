@@ -137,17 +137,17 @@ Antes de qualquer funcionalidade ser desenvolvida, o projeto precisa de uma base
 
 | Requirement ID | Story | Phase | Status |
 |---|---|---|---|
-| FOUND-01 | Estrutura de pastas | Tasks | Pending |
-| FOUND-02 | README com instruções | Tasks | Pending |
-| FOUND-03 | Docker Compose com 3 serviços | Tasks | Pending |
-| FOUND-04 | Health check do Docker (depends_on) | Tasks | Pending |
-| FOUND-05 | `.env.example` funcional | Tasks | Pending |
-| FOUND-06 | `GET /health` retorna 200 | Tasks | Pending |
-| FOUND-07 | Swagger UI acessível em `/docs` | Tasks | Pending |
-| FOUND-08 | Alembic configurado e migração inicial | Tasks | Pending |
-| FOUND-09 | Auto-migração na inicialização | Tasks | Pending |
-| FOUND-10 | Página HTML base com `<canvas>` | Tasks | Pending |
-| FOUND-11 | `js/main.js` carregado sem erros | Tasks | Pending |
+| FOUND-01 | Estrutura de pastas | Tasks | Verified |
+| FOUND-02 | README com instruções | Tasks | Verified |
+| FOUND-03 | Docker Compose com 3 serviços | Tasks | Verified |
+| FOUND-04 | Health check do Docker (depends_on) | Tasks | Verified |
+| FOUND-05 | `.env.example` funcional | Tasks | Verified |
+| FOUND-06 | `GET /health` retorna 200 | Tasks | Verified |
+| FOUND-07 | Swagger UI acessível em `/docs` | Tasks | Verified |
+| FOUND-08 | Alembic configurado e migração inicial | Tasks | Verified |
+| FOUND-09 | Auto-migração na inicialização | Tasks | Verified |
+| FOUND-10 | Página HTML base com `<canvas>` | Tasks | Verified |
+| FOUND-11 | `js/main.js` carregado sem erros | Tasks | Verified |
 
 **Coverage:** 11 requisitos, 0 mapeados para tasks, 11 pendentes ⚠️
 

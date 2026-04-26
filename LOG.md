@@ -132,4 +132,30 @@
 
 ---
 
+---
+
+### Implementação M1 — Fundação do Projeto
+
+**Desenvolvedor:**
+> Podemos começar o desenvolvimento, por favor não se esqueça de registrar as interações e iterações no arquivo de LOG.
+
+**Assistente:**
+> Implementadas todas as 8 tasks do M1 em sequência:
+>
+> | Task | Entregável | Commit |
+> |---|---|---|
+> | T1 | Estrutura de pastas + `.env.example` | `abd1f35` |
+> | T2 | `backend/requirements.txt` | `8d0e768` |
+> | T3 | `backend/app/main.py` + `/health` + config | `2a5f677` |
+> | T4 | `frontend/index.html` + `style.css` + `main.js` | `7080665` |
+> | T5 | `alembic.ini` + `env.py` + migração `0001_initial` | `ae18a10` |
+> | T6 | `backend/Dockerfile` | `d2ddcba` |
+> | T7 | `docker-compose.yml` (db + backend + frontend) | `a5754b6` |
+> | T8 | `README.md` com instruções de setup | `852de64` |
+>
+> Status do M1: **Done** ✅
+> Próxima milestone: M2 — Autenticação com Google SSO
+
+---
+
 <!-- Novas iterações serão adicionadas abaixo -->

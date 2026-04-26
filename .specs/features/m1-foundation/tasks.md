@@ -1,7 +1,7 @@
 # M1 — Fundação: Tasks
 
 **Spec**: `.specs/features/m1-foundation/spec.md`
-**Status**: Approved
+**Status**: Done
 
 > **Nota sobre testes:** Projeto greenfield — TESTING.md ainda não existe.
 > Para M1 (infraestrutura), os gates são smoke tests manuais (comandos de verificação).
