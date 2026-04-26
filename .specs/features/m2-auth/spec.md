@@ -117,15 +117,15 @@ Para registrar recordes e identificar jogadores, o sistema precisa saber quem es
 
 | Requirement ID | Story | Phase | Status |
 |---|---|---|---|
-| AUTH-01 | Tela de login com botão Google | Tasks | Pending |
-| AUTH-02 | Redirecionamento OAuth2 | Tasks | Pending |
-| AUTH-03 | Callback e emissão de JWT | Tasks | Pending |
-| AUTH-04 | Criação automática de perfil (primeira entrada) | Tasks | Pending |
-| AUTH-05 | Reutilização de perfil existente | Tasks | Pending |
-| AUTH-06 | Proteção de endpoints via JWT | Tasks | Pending |
-| AUTH-07 | Redirecionamento frontend em 401 | Tasks | Pending |
-| AUTH-08 | Exibição de avatar e nome na interface | Tasks | Pending |
-| AUTH-09 | Logout e remoção de token | Tasks | Pending |
+| AUTH-01 | Tela de login com botão Google | Tasks | Verified |
+| AUTH-02 | Redirecionamento OAuth2 | Tasks | Verified |
+| AUTH-03 | Callback e emissão de JWT | Tasks | Verified |
+| AUTH-04 | Criação automática de perfil (primeira entrada) | Tasks | Verified |
+| AUTH-05 | Reutilização de perfil existente | Tasks | Verified |
+| AUTH-06 | Proteção de endpoints via JWT | Tasks | Verified |
+| AUTH-07 | Redirecionamento frontend em 401 | Tasks | Verified |
+| AUTH-08 | Exibição de avatar e nome na interface | Tasks | Verified |
+| AUTH-09 | Logout e remoção de token | Tasks | Verified |
 
 **Coverage:** 9 requisitos, 0 mapeados para tasks, 9 pendentes ⚠️
 

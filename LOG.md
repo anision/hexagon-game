@@ -158,4 +158,30 @@
 
 ---
 
+---
+
+### Implementação M2 — Autenticação com Google SSO
+
+**Desenvolvedor:**
+> Podemos seguir para M2.
+
+**Assistente:**
+> Criado `tasks.md` do M2 (8 tasks, 3 fases de paralelismo) e implementado todo o M2:
+>
+> | Task | Entregável | Commit |
+> |---|---|---|
+> | T1 | `User` model + migração `0002_users` | `b1a9309` |
+> | T2 | `security.py` (JWT) + 3 testes unitários | `977b768` |
+> | T3 | `deps.py` (`get_current_user`) + `database.py` | `965a1a4` |
+> | T4 | `api/auth.py` (`/auth/google` + `/auth/callback`) | `17182e6` |
+> | T5 | `api/players.py` (`GET /api/players/me`) | `17182e6` |
+> | T6 | `login.html` com botão Google + mensagem de erro | `27514d8` |
+> | T7 | `auth.js` (token storage, fetchWithAuth, logout) | `2be2248` |
+> | T8 | `main.js` + `index.html` (session check, perfil) | `2be2248` |
+>
+> Testes: 3/3 unitários (JWT) ✅ — Smoke tests: 14/14 verificações ✅
+> Status do M2: **Done** ✅
+
+---
+
 <!-- Novas iterações serão adicionadas abaixo -->

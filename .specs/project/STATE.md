@@ -19,6 +19,7 @@ _(nenhum registrado)_
 - [x] Especificar M1 — Fundação ✓
 - [x] Implementar M1 — Fundação ✓
 - [x] Especificar M2 — Autenticação Google SSO ✓
+- [x] Implementar M2 — Autenticação Google SSO ✓
 - [x] Especificar M3 — Motor do Jogo ✓
 - [x] Especificar M4 — Interface Canvas ✓
 - [x] Especificar M5 — Modos de Jogo ✓
