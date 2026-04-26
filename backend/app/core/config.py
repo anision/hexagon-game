@@ -8,9 +8,7 @@ class Settings(BaseSettings):
     GOOGLE_CLIENT_SECRET: str = ""
     ALLOWED_ORIGIN: str = "http://localhost:3000"
 
-    class Config:
-        env_file = ".env"
-        extra = "ignore"
+    model_config = {"env_file": ".env", "extra": "ignore"}
 
 
 settings = Settings()
