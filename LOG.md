@@ -300,4 +300,33 @@
 
 ---
 
+---
+
+### Implementação M6 — Recordes
+
+**Desenvolvedor:**
+> Seguimos para o M6.
+
+**Assistente:**
+> Implementadas as 4 tasks do M6:
+>
+> | Task | Entregável | Commit |
+> |---|---|---|
+> | T1 | `game.py` model + migração `0003_games` | `c5aea88` |
+> | T2 | `POST /api/games`, `GET /api/players/me/games`, `GET /api/players/me/stats` + 7 testes | `8a642fd` |
+> | T3 | `records.js` — saveGame ao fim da partida, aviso de falha no overlay | `f185bbc` |
+> | T4 | `records.html` + `records.css` — tela de estatísticas e histórico | `f185bbc` |
+>
+> Bugs encontrados e corrigidos:
+> - `Base` (DeclarativeBase) estava em `models/user.py` — movido para `core/database.py` para ser compartilhado por todos os models
+> - Container sem volume mount forçava rebuild a cada mudança — adicionado `./backend:/app` ao docker-compose
+> - `CMD ["./entrypoint.sh"]` falha com volume mount no macOS (bit de execução) — corrigido para `CMD ["sh", "./entrypoint.sh"]`
+>
+> Testes: 10/10 backend (pytest) ✅ | Smoke tests: verificar no browser
+>
+> Status do M6: **Done** ✅
+> Próxima milestone: M7 — Polimento e Deploy
+
+---
+
 <!-- Novas iterações serão adicionadas abaixo -->
