@@ -10,6 +10,10 @@
      Text:        #e2e8f0
 ===================================================== */
 
+/* ── Utility ─────────────────────────────────── */
+
+.hidden { display: none; }
+
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -254,7 +258,8 @@ html, body {
 }
 
 #ai-thinking.hidden {
-  visibility: hidden;     /* hides text but keeps the space reserved */
+  display: block;         /* override .hidden — must keep space reserved */
+  visibility: hidden;     /* hides text while preserving layout space */
 }
 
 @keyframes blink {
