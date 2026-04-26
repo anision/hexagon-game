@@ -29,6 +29,7 @@ _(nenhum registrado)_
 - [x] Implementar M4 — Interface Canvas ✓
 - [x] Implementar M5 — Modos de Jogo ✓
 - [x] Implementar M6 — Recordes ✓
+- [x] Implementar M7 — Polimento e Deploy ✓
 
 ## Deferred Ideas
 

@@ -368,4 +368,26 @@
 >
 > Testes: 63/63 ✅ (todos os arquivos de teste do frontend)
 
+---
+
+### Implementação M7 — Polimento e Deploy
+
+**Desenvolvedor:**
+> Vamos seguir para o M7.
+
+**Assistente:**
+> Criado `tasks.md` do M7 (4 tasks sequenciais) e implementadas todas as tarefas:
+>
+> | Task | Entregáveis | Commit |
+> |---|---|---|
+> | T1 | CSS polish: estilos do login centralizados, estado `disabled`, `#save-error`, aviso mobile, responsividade <1024px | `eb61480` |
+> | T2 | `showToast()` em `auth.js`: toast de erro de rede, HTTP 500 e mensagem de sessão expirada (1.5s delay antes do redirect) | `eb61480` |
+> | T3 | `frontend/config.js` (BACKEND_URL em dev), `nginx/nginx.conf` (static + proxy + config.js override), `docker-compose.prod.yml` (nginx + gunicorn 2 workers + postgres), gunicorn adicionado ao requirements.txt | `eb61480` |
+> | T4 | README.md: seção Deploy completa; `frontend/404.html` com link de retorno | `eb61480` |
+>
+> Testes: 10/10 backend ✅ | 63/63 frontend engine ✅
+>
+> Status do M7: **Done** ✅  
+> **v1 completa!** Todas as milestones (M1–M7) implementadas.
+
 <!-- Novas iterações serão adicionadas abaixo -->
