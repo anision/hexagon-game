@@ -18,13 +18,15 @@ async def test_create_game_returns_201(client: AsyncClient):
     assert len(data["game_id"]) == 36  # UUID
 
 
-async def test_create_game_invalid_score_returns_422(client: AsyncClient):
+async def test_create_game_partial_board_returns_201(client: AsyncClient):
+    # Game can end before board is full (player has no valid moves),
+    # so score_player1 + score_player2 < 61 is valid.
     res = await client.post("/api/games", json={
         "score_player1": 30,
-        "score_player2": 30,   # 30+30=60 ≠ 61
+        "score_player2": 20,   # 50 pieces total — board not full
         "mode": "pvc",
     })
-    assert res.status_code == 422
+    assert res.status_code == 201
 
 
 async def test_create_game_invalid_mode_returns_422(client: AsyncClient):

@@ -62,12 +62,6 @@ async def create_game(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    if body.score_player1 + body.score_player2 != 61:
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail="score_player1 + score_player2 must equal 61",
-        )
-
     game = Game(
         id=str(uuid.uuid4()),
         player1_id=current_user.id,
