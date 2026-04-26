@@ -55,7 +55,7 @@ async def test_get_games_returns_created_game(client: AsyncClient):
     assert len(games) == 1
     g = games[0]
     assert g["opponent_name"] == "Computador"
-    assert g["result"] == "draw"      # winner_id is null → draw
+    assert g["result"] == "loss"      # winner_id is null → player2 won → loss for player1
     assert g["score_player"] == 40
     assert g["score_opponent"] == 21
     assert g["mode"] == "pvc"
@@ -73,7 +73,8 @@ async def test_get_stats_no_games(client: AsyncClient):
 
 
 async def test_get_stats_with_games(client: AsyncClient, test_user):
-    # 2 wins (winner_id = test_user.id), 1 draw (winner_id = None)
+    # 2 wins (winner_id = test_user.id), 1 loss (winner_id = None → player2 won)
+    # Draws are impossible with 61 cells (odd total).
     for score in [(40, 21), (35, 26)]:
         await client.post("/api/games", json={
             "winner_id": test_user.id,
@@ -83,8 +84,8 @@ async def test_get_stats_with_games(client: AsyncClient, test_user):
         })
     await client.post("/api/games", json={
         "winner_id": None,
-        "score_player1": 31,
-        "score_player2": 30,
+        "score_player1": 30,
+        "score_player2": 31,
         "mode": "pvc",
     })
 
@@ -93,6 +94,6 @@ async def test_get_stats_with_games(client: AsyncClient, test_user):
     s = res.json()
     assert s["total_games"] == 3
     assert s["wins"] == 2
-    assert s["draws"] == 1
-    assert s["losses"] == 0
+    assert s["draws"] == 0
+    assert s["losses"] == 1
     assert s["win_rate"] == round(2 / 3 * 100, 1)

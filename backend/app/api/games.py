@@ -107,10 +107,9 @@ async def get_my_games(
             opp = opp_result.scalar_one_or_none()
             opponent_name = opp.name if opp else "Desconhecido"
 
-        # Determine result from player1's perspective
-        if g.winner_id is None:
-            result_str = "draw"
-        elif g.winner_id == current_user.id:
+        # Determine result from player1's perspective.
+        # winner_id=None means player2 won (draws impossible with 61 cells — odd total).
+        if g.winner_id == current_user.id:
             result_str = "win"
         else:
             result_str = "loss"
@@ -137,19 +136,16 @@ async def get_my_stats(
         select(
             func.count().label("total"),
             func.sum(case((Game.winner_id == current_user.id, 1), else_=0)).label("wins"),
-            func.sum(case(
-                (Game.winner_id.isnot(None) & (Game.winner_id != current_user.id), 1),
-                else_=0
-            )).label("losses"),
-            func.sum(case((Game.winner_id.is_(None), 1), else_=0)).label("draws"),
         ).where(Game.player1_id == current_user.id)
     )
     row = result.one()
 
-    total  = row.total  or 0
-    wins   = int(row.wins   or 0)
-    losses = int(row.losses or 0)
-    draws  = int(row.draws  or 0)
+    # Draws are mathematically impossible with 61 cells (odd total — no equal split).
+    # winner_id=None always means player2 won, so losses = total - wins.
+    total  = row.total or 0
+    wins   = int(row.wins or 0)
+    draws  = 0
+    losses = total - wins
     win_rate = round(wins / total * 100, 1) if total > 0 else 0.0
 
     return PlayerStats(
